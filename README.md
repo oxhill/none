@@ -1,4 +1,4 @@
-# kaishile
+# None
 ## 模块导入
 ```
 from flask import Flask,request,json, jsonify,  current_app
@@ -6,6 +6,8 @@ import time
 from flask_pymongo import PyMongo
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_sqlalchemy import SQLAlchemy
+import flask_whooshalchemyplus
+from jieba.analyse.analyzer import ChineseAnalyzer
 app=Flask(__name__)
 tasks=list()
 app=Flask(__name__)
@@ -119,6 +121,21 @@ def all_ask():
 	if request.method=="DELETE":
 		tasks.remove(tasks)#删除所有事项
 		return make_resp({})
+```
+## 查询
+```
+ #初始化搜索
+flask_whooshalchemyplus.init_app(app)
+@api.route('/search',methods=["GET","POST"])
+def search():
+    if request.method == "POST":
+        q = str(request.form.get('tasks'))
+        result = all_task.query.whoosh_search(q).all()
+        return render_template('search_back.html',results=result)
+
+    flask_whooshalchemyplus.index_one_model(all_task)
+
+    return render_template('search.html')
 if __name__=='__main__':
 
 	app.run(debug=True)
