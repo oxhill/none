@@ -123,6 +123,7 @@ def all_ask():
 		return make_resp({})
 ```
 ## 查询
+   
 ```
  #初始化搜索
 flask_whooshalchemyplus.init_app(app)
@@ -136,6 +137,7 @@ def search():
     flask_whooshalchemyplus.index_one_model(all_task)
 
     return render_template('search.html')
+    （还没写好www）
 if __name__=='__main__':
 
 	app.run(debug=True)
